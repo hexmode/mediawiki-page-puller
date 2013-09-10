@@ -188,52 +188,8 @@ class PagePuller {
 		$wgRequest = $req;
 		$retval = $ep->internalAttemptSave($result);
 		$wgRequest = $oldRequest;
-		switch($retval)
-		{
-			case EditPage::AS_HOOK_ERROR:
-			case EditPage::AS_HOOK_ERROR_EXPECTED:
-				throw new MWException( 'hookaborted');
-			case EditPage::AS_IMAGE_REDIRECT_ANON:
-				throw new MWException( 'noimageredirect-anon');
-			case EditPage::AS_IMAGE_REDIRECT_LOGGED:
-				throw new MWException( 'noimageredirect-logged');
-			case EditPage::AS_SPAM_ERROR:
-				throw new MWException( 'spamdetected' );
-			case EditPage::AS_FILTERING:
-				throw new MWException( 'filtered');
-			case EditPage::AS_BLOCKED_PAGE_FOR_USER:
-				throw new MWException( 'blockedtext');
-			case EditPage::AS_MAX_ARTICLE_SIZE_EXCEEDED:
-			case EditPage::AS_CONTENT_TOO_BIG:
-				global $wgMaxArticleSize;
-				throw new MWException( 'contenttoobig' );
-			case EditPage::AS_READ_ONLY_PAGE_ANON:
-				throw new MWException( 'noedit-anon');
-			case EditPage::AS_READ_ONLY_PAGE_LOGGED:
-				throw new MWException( 'noedit');
-			case EditPage::AS_READ_ONLY_PAGE:
-				throw new MWException( 'readonlytext');
-			case EditPage::AS_RATE_LIMITED:
-				throw new MWException( 'actionthrottledtext');
-			case EditPage::AS_ARTICLE_WAS_DELETED:
-				throw new MWException( 'wasdeleted');
-			case EditPage::AS_NO_CREATE_PERMISSION:
-				throw new MWException( 'nocreate-loggedin');
-			case EditPage::AS_BLANK_ARTICLE:
-				throw new MWException( 'blankpage');
-			case EditPage::AS_CONFLICT_DETECTED:
-				throw new MWException('editconflict');
-			#case EditPage::AS_SUMMARY_NEEDED: Can't happen since we set wpIgnoreBlankSummary
-			#case EditPage::AS_TEXTBOX_EMPTY: Can't happen since we don't do sections
-			case EditPage::AS_END:
-				# This usually means some kind of race condition
-				# or DB weirdness occurred. Throw an unknown error here.
-				throw new MWException('unknownerror');
-			case EditPage::AS_SUCCESS_NEW_ARTICLE:
-			case EditPage::AS_SUCCESS_UPDATE:
-				break;
-			default:
-				throw new MWException('unknownerror');
+		if ( !$retval->isGood() ) {
+			throw new MWException( $retval->getHTML() );
 		}
 		global $wgOut;
 		if( $wgOut->mRedirect !== null ) { /* Otherwise we end up on the last page successfully imported */
