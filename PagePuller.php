@@ -111,7 +111,7 @@ class PagePuller {
 				$this->cookies = "{$pref}UserId=$uid; {$pref}UserName=$username; {$pref}_session=$sess";
 			}
 		}
-		throw new Exception( wfMsg( 'pagepull-login-failed' ) );
+		throw new Exception( wfMessage( 'pagepull-login-failed' )->text() );
 	}
 
 	public function pullFile( $page, $contents ) {

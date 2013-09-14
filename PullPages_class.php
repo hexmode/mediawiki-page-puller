@@ -25,7 +25,7 @@ class PullPages extends SpecialPage {
 		ini_set('memory_limit', '512M'); /* Need a lot of memory for
 										  * this to run */
 
-		$wgOut->setPagetitle( wfMsg( 'pullpages' ) );
+		$wgOut->setPagetitle( wfMessage( 'pullpages' )->text() );
 
 		if (  !$this->userCanExecute( $wgUser )  ) {
 			$this->displayRestrictionError();
@@ -51,7 +51,7 @@ class PullPages extends SpecialPage {
 
 			$this->pullPage = $wgRequest->getVal("sourcePage");
 		} else {
-			$wgOut->addWikiText( wfMsg('pullpage-no-wiki') );
+			$wgOut->addWikiText( wfMessage( 'pullpage-no-wiki' )->text() );
 		}
 
 		if( $this->puller ) {
@@ -79,21 +79,21 @@ class PullPages extends SpecialPage {
 				'method' => 'post',
 				'action' => $wgRequest->getRequestURL() ) ) .
 			'<fieldset>' .
-			Xml::inputLabel( wfMsg( 'pullpage-source-wiki' ),
+			Xml::inputLabel( wfMessage( 'pullpage-source-wiki' )->text(),
 				'sourceWiki', 'sourceWiki', 40,
 				$wgRequest->getVal( "sourceWiki" ) ) . '<br>' .
-			Xml::inputLabel( wfMsg( 'pullpage-source-page' ),
+			Xml::inputLabel( wfMessage( 'pullpage-source-page' )->text(),
 				'sourcePage', 'sourcePage', 20, $this->pullPage ) . '<br>' .
-			Xml::inputLabel( wfMsg( 'pullpage-source-user' ),
+			Xml::inputLabel( wfMessage( 'pullpage-source-user' )->text(),
 				'sourceUser', 'sourceUser', 20,
 				$wgRequest->getVal( "sourceUser" ) ) . '<br>' .
-			Xml::inputLabel( wfMsg( 'pullpage-source-pass' ),
+			Xml::inputLabel( wfMessage( 'pullpage-source-pass' )->text(),
 				'sourcePass', 'sourcePass', 20, "",
 				array('type' => 'password') ) . '<br>' .
-			Xml::checkLabel( wfMsg( 'pullpage-use-imgauth' ),
+			Xml::checkLabel( wfMessage( 'pullpage-use-imgauth' )->text(),
 				'useImgAuth', 'useImgAuth',
 				$wgRequest->getVal( "useImgAuth" ) ) . '<br>' .
-			Xml::submitButton( wfMsg( 'pullpage-submit' ) ) .
+			Xml::submitButton( wfMessage( 'pullpage-submit' )->text() ) .
 			'</fieldset>' .
 			'</form>' );
 	}
@@ -101,7 +101,7 @@ class PullPages extends SpecialPage {
 	public function startProgress() {
 		global $wgOut;
 
-		$wgOut->addWikiText( wfMsg( "pullpage-progress-start" ) );
+		$wgOut->addWikiText( wfMessage( "pullpage-progress-start" )->text() );
 	}
 
 	public function showProgress( $pageName, $status ) {
