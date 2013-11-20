@@ -1,6 +1,7 @@
 <?php
 $messages['en'] = array(
 	'pullpages' => 'Pull Pages',
+	'action-pullpage' => "pull pages",
 	'pullpage-intro' => "Please specify the wiki you want to pull pages from.  If a username and password isn't given, then the pull will be done anonymously and imgauth will not be able to be used.",
 	'pullpage-source-wiki' => "Base URL of source wiki.  (e.g. http://example.com/index.php):",
 	'pullpage-source-page' => "Page to use on the source wiki to find a list of pages to pull:",
