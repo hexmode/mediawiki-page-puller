@@ -39,7 +39,7 @@ class PullPages extends SpecialPage {
 	}
 
 	public function processPullRequest() {
-		global $wgRequest;
+		global $wgRequest, $wgOut;
 
 		if( $wgRequest->getVal("sourceWiki", "") != "" &&
 			$wgRequest->getVal("sourcePage", "") != "" ) {
