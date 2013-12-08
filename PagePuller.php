@@ -164,37 +164,40 @@ class PagePuller {
 
 		/* Skimmed from ApiEditPage -- MAH20130715 */
 		$title = Title::newFromText( $page );
-		$article = new Article($title);
+		if ( $title ) {
+			$article = new Article($title);
 
-		$reqArr['wpTextbox1'] = $content;
-		$reqArr['wpRecreate'] = true;
-		if( $article->exists() ) {
-			$reqArr['wpEdittime'] = $article->getTimestamp(); /* If we don't do this for existing articles, we get a conflict */
-		} else {
-			$reqArr['wpEdittime'] = wfTimestampNow();
-		}
-		$reqArr['wpSummary'] = "[[Special:PullPages|PullPages]] import";
-		$req = new FauxRequest($reqArr, true);
-		$ep = new EditPage( $article );
-		$ep->importFormData($req);
+			$reqArr['wpTextbox1'] = $content;
+			$reqArr['wpRecreate'] = true;
+			if( $article->exists() ) {
+				$reqArr['wpEdittime'] = $article->getTimestamp(); /* If we don't do this for existing articles, we get a conflict */
+			} else {
+				$reqArr['wpEdittime'] = wfTimestampNow();
+			}
+			$reqArr['wpSummary'] = "[[Special:PullPages|PullPages]] import";
+			$req = new FauxRequest($reqArr, true);
+			$ep = new EditPage( $article );
+			$ep->importFormData($req);
 
-		# Do the actual save
-		$oldRevId = $article->getRevIdFetched();
-		$result = null;
+			# Do the actual save
+				$oldRevId = $article->getRevIdFetched();
+			$result = null;
 
-		# Fake $wgRequest for some hooks inside EditPage
-		# FIXME: This interface SUCKS
-		$oldRequest = $wgRequest;
-		$wgRequest = $req;
-		$retval = $ep->internalAttemptSave($result);
-		$wgRequest = $oldRequest;
-		if ( !$retval->isGood() ) {
-			throw new MWException( $retval->getHTML() );
-		}
-		global $wgOut;
-		if( $wgOut->mRedirect !== null ) { /* Otherwise we end up on the last page successfully imported */
-			$wgOut->mRedirect = null;
-			return true;
+			# Fake $wgRequest for some hooks inside EditPage
+										   # FIXME: This interface SUCKS
+										   $oldRequest = $wgRequest;
+			$wgRequest = $req;
+			$retval = $ep->internalAttemptSave($result);
+			$wgRequest = $oldRequest;
+			if ( !$retval->isGood() ) {
+				throw new MWException( $retval->getHTML() );
+			}
+			global $wgOut;
+			if( $wgOut->mRedirect !== null ) {
+				/* Otherwise we end up on the last page successfully imported */
+				$wgOut->mRedirect = null;
+				return true;
+			}
 		}
 		return false;
 	}
