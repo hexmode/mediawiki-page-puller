@@ -163,8 +163,8 @@ class PagePuller {
 		global $wgRequest, $wgUser;
 
 		/* Skimmed from ApiEditPage -- MAH20130715 */
-		$title = Title::newFromText( $page );
-		if ( $title ) {
+		if ( $page ) {
+			$title = Title::newFromText( $page );
 			$article = new Article($title);
 
 			$reqArr['wpTextbox1'] = $content;
