@@ -153,6 +153,7 @@ class PagePuller {
 		}
 
 		$status = $img->upload( $tmpfile, "[[Special:PullPages|PullPages]] upload", $contents );
+		unlink( $tmpfile );
 		if( !$status->isGood() ) {
 			return Status::newFatal( "pagepuller-upload-error", $status->getWikiTextArray( ) );
 		}
